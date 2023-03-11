@@ -24,7 +24,7 @@ const GoogleOneTapLogin = () => {
       })
       window.google.accounts.id.prompt((notification) => {
         if (notification.isNotDisplayed()) {
-          throw new Error('Tente limpar os cookes do seu navegador')
+          throw new Error('Tente limpar os cookies do seu navegador')
         }
         if(notification.isSkippedMoment() || notification.isDismissedMoment()){
          setDisabled(false)

@@ -1,4 +1,4 @@
-import { Close, Google, Send } from "@mui/icons-material";
+import { Close, Send } from "@mui/icons-material";
 import {
   Button,
   Dialog,
@@ -29,7 +29,7 @@ const Login = () => {
   const confirmPasswordRef = useRef();
 
   const handleClose = () => {
-    dispatch({ type: "CLOSE_LOGIN" });
+    dispatch({ type: 'CLOSE_LOGIN'});
   };
 
   const handleSubmit = (e) => {
@@ -51,6 +51,8 @@ const Login = () => {
           message: "As senhas não são iguais",
         },
       });
+
+      
 
 
       register({name, email, password}, dispatch)
@@ -120,7 +122,7 @@ const Login = () => {
         </DialogContent>
         <DialogActions sx={{ px: "19px" }}>
           <Button type="submit" variant="contained" endIcon={<Send />}>
-            Entrar
+          {!isRegister ? "Login" : "Registrar"}
           </Button>
         </DialogActions>
       </form>
