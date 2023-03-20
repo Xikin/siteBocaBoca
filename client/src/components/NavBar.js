@@ -9,11 +9,11 @@ import {
   Typography,
 } from '@mui/material';
 import { MenuOpen, Lock } from '@mui/icons-material';
-import photoURL from '../transferir.png'
+
 import Usericons from './user/Usericons';
 import { useValue } from '../context/ContextProvider';
 
-const user = {name:'test',photoURL}
+
 
 const NavBar = () => {
 
@@ -22,6 +22,7 @@ const NavBar = () => {
 } = useValue()
 
   return (
+    <>
     <AppBar style={{ background: '#8a00c2' }}>
       <Container maxWidth="lg">
         <Toolbar disableGutters>
@@ -59,6 +60,8 @@ const NavBar = () => {
         </Toolbar>
       </Container>
     </AppBar>
+    <Toolbar />
+    </>
   );
 };
 
