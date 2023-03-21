@@ -1,2 +1,0 @@
-# siteBocaBoca
-Projeto da faculdade
