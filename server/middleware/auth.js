@@ -1,4 +1,8 @@
+//Verificação do tipo de login usado podendo ser pela API do Google ou pelo cadastro no site.
+
 import { OAuth2Client } from 'google-auth-library';
+import jwt from 'jsonwebtoken';
+
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 const auth = async (req, res, next) => {
@@ -17,17 +21,17 @@ const auth = async (req, res, next) => {
         photoURL: payload.picture,
       };
     } else {
-      // to do: verify our custom jwt token
+      const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+      const { id, name, photoURL } = decodedToken;
+      req.user = { id, name, photoURL };
     }
     next();
   } catch (error) {
     console.log(error);
-    res
-      .status(401)
-      .json({
-        success: false,
-        message: 'Algo está errado com sua autorização!',
-      });
+    res.status(401).json({
+      success: false,
+      message: 'Algo está errado com a sua autenticação!',
+    });
   }
 };
 

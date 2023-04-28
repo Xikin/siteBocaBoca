@@ -1,4 +1,4 @@
-import { Close, Google, Send } from "@mui/icons-material";
+import { Close, Send } from "@mui/icons-material";
 import {
   Button,
   Dialog,
@@ -16,11 +16,9 @@ import { useValue } from "../../context/ContextProvider";
 import GoogleOneTapLogin from "./GoogleOneTapLogin";
 import PasswordField from "./PasswordField";
 
+
 const Login = () => {
-  const {
-    state: { openLogin },
-    dispatch,
-  } = useValue();
+  const {state: { openLogin }, dispatch,} = useValue();
   const [title, setTitle] = useState("Login");
   const [isRegister, setIsRegister] = useState(false);
   const nameRef = useRef();
@@ -29,7 +27,7 @@ const Login = () => {
   const confirmPasswordRef = useRef();
 
   const handleClose = () => {
-    dispatch({ type: "CLOSE_LOGIN" });
+    dispatch({ type: 'CLOSE_LOGIN'});
   };
 
   const handleSubmit = (e) => {
@@ -38,7 +36,7 @@ const Login = () => {
     const email = emailRef.current.value;
     const password = passwordRef.current.value;
     //enviar a requisição se não estiver registrado e retornar
-    if(!isRegister)return  login({email, password},dispatch)//Se estiver logado retorna a chamada da funçãp login
+    if(!isRegister) return  login({email, password},dispatch)//Se estiver logado retorna a chamada da funçãp login
     
     const name = nameRef.current.value;
     const confirmPassword = confirmPasswordRef.current.value;
@@ -52,8 +50,11 @@ const Login = () => {
         },
       });
 
+      
+
 
       register({name, email, password}, dispatch)
+
 
     //Registrar requisições envios
   };
@@ -62,7 +63,7 @@ const Login = () => {
     isRegister ? setTitle("Registrar") : setTitle("Login");
   }, [isRegister]);
   return (
-    <Dialog open={openLogin} onclose={handleClose}>
+    <Dialog open={openLogin} onClose={handleClose}>
       <DialogTitle>
         {title}
         <IconButton
@@ -119,8 +120,8 @@ const Login = () => {
           )}
         </DialogContent>
         <DialogActions sx={{ px: "19px" }}>
-          <Button type="submit" variant="contained" endIcon={<Send />}>
-            Entrar
+          <Button type="submit"  variant="contained" endIcon={<Send />}>
+          {!isRegister ? "Login" : "Registrar"} 
           </Button>
         </DialogActions>
       </form>

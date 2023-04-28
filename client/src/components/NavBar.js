@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   AppBar,
   Box,
@@ -9,11 +9,12 @@ import {
   Typography,
 } from '@mui/material';
 import { MenuOpen, Lock } from '@mui/icons-material';
-import photoURL from '../transferir.png'
+
 import Usericons from './user/Usericons';
 import { useValue } from '../context/ContextProvider';
+import Sidebar from './sidebar/Sidebar';
 
-const user = {name:'test',photoURL}
+
 
 const NavBar = () => {
 
@@ -21,12 +22,15 @@ const NavBar = () => {
   dispatch
 } = useValue()
 
+const [isOpen, setIsOpen]= useState(false); // controla a abertura do componente Sidebar.jsx
+
   return (
+    <>
     <AppBar style={{ background: '#8a00c2' }}>
       <Container maxWidth="lg">
         <Toolbar disableGutters>
           <Box sx={{ mr: 1 }}>
-            <IconButton size="large" color="inherit">
+            <IconButton size="large" color="inherit" onClick={()=> setIsOpen(true)}>
               < MenuOpen/>
             </IconButton>
           </Box>
@@ -59,6 +63,9 @@ const NavBar = () => {
         </Toolbar>
       </Container>
     </AppBar>
+    <Toolbar />
+    <Sidebar {...{isOpen,setIsOpen}}/>
+    </>
   );
 };
 
