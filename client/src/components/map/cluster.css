@@ -1,0 +1,44 @@
+
+/*Bttão Circular das localidades no mapa*/
+.cluster-maker{
+    color:#fff;
+    background: #c819b9;
+    border-radius: 50%;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+/* Botão de fechar dp popup aberto ao selecionar um local especifico */
+.mapboxgl-popup-close-button{
+    font-size: 2rem;
+    color: #eaeaea;
+    opacity: 0.53;
+    z-index: 2;
+    transition: opacity 0.3s linear;
+}
+
+.mapboxgl-popup-close-button:hover{
+    opacity: 0.85;
+    color: #c819b9;
+}
+
+
+
+
+
+.mapboxgl-popup-content {
+    padding: 0 !important;
+  }
+  /*Borda de baixo e de cima que cobre as imagens do popup  */
+
+  .mapboxgl-popup-tip {
+    border-bottom-color: rgba(0, 0, 0, 0.5) !important;
+    border-top-color: rgba(0, 0, 0, 0.5) !important;
+  }
+  
+  .swiper {
+    z-index: unset !important;
+  }

@@ -23,12 +23,12 @@ const auth = async (req, res, next) => {
       const { id, name, photoURL } = decodedToken;
       req.user = { id, name, photoURL };
     }
-    next();
+    next();6
   } catch (error) {
     console.log(error);
     res.status(401).json({
       success: false,
-      message: 'Something is wrong with your authorization!',
+      message: 'Algo está errado com a sua autenticação!',
     });
   }
 };

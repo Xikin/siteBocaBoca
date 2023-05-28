@@ -7,6 +7,8 @@ import ClusterMap from './map/ClusterMap';
 import Estabelecimentos from './estabelecimentos/Estabelecimentos';
 import AddRoom from './addPlace/AddRoom';
 import { useEffect } from 'react';
+import Protected from './protectedView/Protected';
+import { purple } from '@mui/material/colors';
 const BottomNav = () => {
  
  const [value, setValue]= useState(0)
@@ -20,7 +22,7 @@ const BottomNav = () => {
     {{
         0:<ClusterMap/>,
         1:<Estabelecimentos/>,
-        2:<AddRoom/>,
+        2:<Protected> <AddRoom setPage={setValue} /></Protected>,
     }[value]}
 <Paper
 elevation={3}
@@ -30,12 +32,13 @@ sx={{position:'fixed', bottom:0, left:0, right:0,  zIndex:2}}
 showLabels
 value={value}
 onChange={(e, newValue)=>setValue(newValue)}
+sx={{ bgcolor: '#8A00C2'}}
 >
-    <BottomNavigationAction label='Map' icon={<LocationOn/>} />
-    <BottomNavigationAction label='Estabelecimentos' icon={<RestaurantIcon/>} />
-    <BottomNavigationAction label='Add' icon={<AddLocationAlt/>} />
+    <BottomNavigationAction sx={{ bgcolor: '#8A00C2'}} label='Map' icon={<LocationOn/>} />
+    <BottomNavigationAction sx={{ bgcolor: '#8A00C2'}} label='Estabelecimentos' icon={<RestaurantIcon/>} />
+    <BottomNavigationAction sx={{ bgcolor: '#8A00C2'}} label='Add' icon={<AddLocationAlt/>} />
 
-</BottomNavigation>
+</BottomNavigation >
 </Paper>
 </Box>
     )

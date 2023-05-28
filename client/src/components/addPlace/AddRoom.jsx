@@ -12,10 +12,12 @@ import { useValue } from '../../context/ContextProvider';
   import AddDetails from './addDetails/AddDetails';
   import AddImages from './addImages/AddImages';
   import AddLocation from './addLocation/AddLocation';
+import { Send } from '@mui/icons-material';
+import { createPlace } from '../../actions/place';
   
-  const AddRoom = () => {
+  const AddRoom = ({setPage}) => {
     const {
-      state:{images, details, location}
+      state:{images, details, location, currentUser }, dispatch
     } = useValue();
     const [activeStep, setActiveStep] = useState(0);
     const [steps, setSteps] = useState([
@@ -23,6 +25,8 @@ import { useValue } from '../../context/ContextProvider';
       { label: 'Details', completed: false },
       { label: 'Images', completed: false },
     ]);
+
+    const [showSubmit,setShowSubmit] = useState(false);
     const handleNext = () => {
 
 
@@ -71,6 +75,26 @@ import { useValue } from '../../context/ContextProvider';
         return [...steps];
       });
     };
+    useEffect(()=>{
+if(findUnfinished()=== -1){
+  if(!showSubmit)setShowSubmit(true)
+}else{
+  if(showSubmit)setShowSubmit(true)
+
+}
+    },[steps])
+
+    const handleSubmit = ()=>{
+      const place = {
+        lng:location.lng,
+        lat: location.lat,
+        price: details.price,
+        title:details.title,
+        description:details.description, 
+        images
+      }
+      createPlace(place,currentUser,dispatch,setPage)
+    }
     return (
       <Container sx={{ my: 4 }}>
         <Stepper
@@ -87,7 +111,9 @@ import { useValue } from '../../context/ContextProvider';
             </Step>
           ))}
         </Stepper>
-        <Box>
+        <Box
+        sx={{pb:7}}
+        >
           {
             {
               0: <AddLocation />,
@@ -95,10 +121,10 @@ import { useValue } from '../../context/ContextProvider';
               2: <AddImages />,
             }[activeStep]
           }
-        </Box>
+        
         <Stack
           direction="row"
-          sx={{ pt: 2, pb: 7, justifyContent: 'space-around' }}
+          sx={{ pt: 2, justifyContent: 'space-around' }}
         >
           <Button
             color="inherit"
@@ -111,6 +137,18 @@ import { useValue } from '../../context/ContextProvider';
             Proximo
           </Button>
         </Stack>
+        {showSubmit &&(
+          <Stack
+          sx={{alignItems:'center'}}
+          >
+            <Button
+            variant='contained'
+            endIcon={<Send/>}
+            onClick={handleSubmit}
+            >Enviar</Button>
+          </Stack>
+        )}
+        </Box>
       </Container>
     );
   };

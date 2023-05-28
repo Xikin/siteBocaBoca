@@ -1,9 +1,10 @@
-import { Logout, Settings } from '@mui/icons-material';
+import { Dashboard, Logout, Settings } from '@mui/icons-material';
 import { ListItemIcon, Menu, MenuItem } from '@mui/material';
 import React from 'react';
 import { useValue } from '../../context/ContextProvider';
 import useCheckToken from '../../hooks/useCheckToken';
 import Profile from './Profile';
+import { useNavigate } from 'react-router-dom';
 
 const UserMenu = ({ anchorUserMenu, setAnchorUserMenu }) => {
   useCheckToken();
@@ -15,6 +16,8 @@ const UserMenu = ({ anchorUserMenu, setAnchorUserMenu }) => {
     setAnchorUserMenu(null);
   };
 
+  const navigate = useNavigate();
+
   return (
     <>
       <Menu
@@ -23,7 +26,7 @@ const UserMenu = ({ anchorUserMenu, setAnchorUserMenu }) => {
         onClose={handleCloseUserMenu}
         onClick={handleCloseUserMenu}
       >
-        {!currentUser.google && (
+           {!currentUser.google && (
           <MenuItem
             onClick={() =>
               dispatch({
@@ -39,9 +42,17 @@ const UserMenu = ({ anchorUserMenu, setAnchorUserMenu }) => {
             <ListItemIcon>
               <Settings fontSize="small" />
             </ListItemIcon>
-            Profile
+            Perfil
           </MenuItem>
         )}
+        <MenuItem
+          onClick={() => navigate('dashboard')}
+        >
+          <ListItemIcon>
+          <Dashboard fontSize="small" />
+          </ListItemIcon>
+          Dashboard
+        </MenuItem>
         <MenuItem
           onClick={() => dispatch({ type: 'UPDATE_USER', payload: null })}
         >
