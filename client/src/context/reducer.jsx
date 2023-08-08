@@ -92,10 +92,10 @@ const reducer = (state, action) => {
 
               case 'UPDATE_USERS':
                 return {...state, users: action.payload};
-                case 'DELETE_PLACE':
+                case 'DELETE_ESTABLISHMENT':
                   return {
                     ...state,
-                    establishment: state.establishment.filter((establishment) => establishment._id !== action.payload),
+                    place: state.place.filter((establishment) => establishment._id !== action.payload),
                   }; 
             
                 case 'UPDATE_SECTION':

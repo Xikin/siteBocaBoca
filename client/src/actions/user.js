@@ -97,4 +97,15 @@ export const getUsers = async (dispatch) => {
   if (result) {
     dispatch({ type: 'UPDATE_USERS', payload: result })
   }
+};
+
+
+//Atualizar as regras no dashboard para os usuários da aplicação
+export const updateStatus = (updatedFields, userId, dispatch)=>{
+  return fetchData({
+    url: `${url}/updateStatus/${userId}`,
+    method: 'PATCH',
+    body:updatedFields, //Os campos role e se o botão está ativo
+
+  },dispatch)
 }

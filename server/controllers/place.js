@@ -13,3 +13,8 @@ export const getPlace = tryCatch(async (req, res) => {
   const place = await Place.find().sort({ _id: -1 });
   res.status(200).json({ success: true, result: place });
 })
+
+export const deletePlace = tryCatch(async (req, res) => {
+  const { _id } = await Place.findByIdAndDelete(req.params.placeId);
+  res.status(200).json({ success: true, result: { _id } });
+});

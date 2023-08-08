@@ -7,7 +7,7 @@ import Geocoder from './Geocoder';
 
 const AddLocation = () => {
   const { state: { location: { lng, lat } }, dispatch } = useValue()
-  const mapRef = useRef()
+  const mapRef = useRef();
 
   useEffect(()=>{
     if(!lng && !lat){
@@ -30,6 +30,12 @@ const AddLocation = () => {
     >
       <ReactMapGL
         ref={mapRef}
+        onClick={(e) => {
+          dispatch({
+            type: 'UPDATE_LOCATION',
+            payload: { lng: e.lngLat.lng, lat: e.lngLat.lat },
+          })
+        }}
         mapboxAccessToken={process.env.REACT_APP_MAP_TOKEN}
         initialViewState={
           {
@@ -44,6 +50,7 @@ const AddLocation = () => {
           latitude={lat}
           longitude={lng}
           draggable
+          color='#6E009B'
           onDragEnd={(e) => {
             dispatch({
               type: 'UPDATE_LOCATION',

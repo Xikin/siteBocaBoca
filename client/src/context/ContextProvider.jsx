@@ -12,6 +12,9 @@ const initialState = {
   images: [],
   details: { title: '', description: '', price: 0 },
   location: { lng: 0, lat: 0 },
+  updatedPlace:null,
+  deletedImages: [],
+  addedImages: [],
   place: [],
   priceFilter: 100,
   addressFilter: null,
@@ -20,6 +23,7 @@ const initialState = {
   users:[],
   section:0,
 };
+
  
 const Context = createContext(initialState);
 
@@ -45,7 +49,7 @@ const ContextProvider = ({ children }) => {
         dispatch({ type: 'UPDATE_LOCATION', payload: establishment.location });
         dispatch({ type: 'UPDATE_DETAILS', payload: establishment.details });
         dispatch({ type: 'UPDATE_IMAGES', payload: establishment.images });
-        dispatch({ type: 'UPDATE_UPDATED_ROOM', payload: establishment.updatedRoom });
+        dispatch({ type: 'UPDATE_UPDATED_PLACE', payload: establishment.updatedPlace });
         dispatch({
           type: 'UPDATE_DELETED_IMAGES',
           payload: establishment.deletedImages,
