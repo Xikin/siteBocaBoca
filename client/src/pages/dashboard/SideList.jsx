@@ -30,7 +30,10 @@ import {
   import Requests from './requests/Requests';
   import Places from './places/Places';
   import Users from './users/Users';
-  
+import { storePlace } from '../../actions/place';
+import { logout } from '../../actions/user';
+import useCheckToken from '../../hooks/useCheckToken' 
+import isAdmin from './utils/isAdmin';
   const drawerWidth = 240;
   
   const openedMixin = (theme) => ({
@@ -59,7 +62,7 @@ import {
     alignItems: 'center',
     justifyContent: 'flex-end',
     padding: theme.spacing(0, 1),
-    // necessary for content to be below app bar
+    // Necessario para o conteudo ficar abaixo da APPBAR 
     ...theme.mixins.toolbar,
   }));
   
@@ -81,8 +84,9 @@ import {
   }));
   
   const SideList = ({ open, setOpen }) => {
+    useCheckToken()
     const {
-      state: { currentUser },
+      state: { currentUser, location ,details, images, updatedPlace, deletedImages, addedImages},
       dispatch,
     } = useValue();
   
@@ -90,7 +94,8 @@ import {
   
     const list = useMemo(
       () => [
-        {
+        //Verica na sidelist do Dashboard as permissoes de vizualização do usuário logado.
+        ...isAdmin(currentUser)? [ {
           title: 'Main',
           icon: <Dashboard />,
           link: '',
@@ -101,7 +106,8 @@ import {
           icon: <PeopleAlt />,
           link: 'users',
           component: <Users {...{ setSelectedLink, link: 'users' }} />,
-        },
+        },] : [],
+       
         {
           title: 'Places',
           icon: <KingBed />,
@@ -127,8 +133,9 @@ import {
     const navigate = useNavigate();
   
     const handleLogout = () => {
-      dispatch({ type: 'UPDATE_USER', payload: null });
-      navigate('/');
+      storePlace(location, details, images, updatedPlace, deletedImages, addedImages, currentUser.id);
+      logout(dispatch);
+     
     };
     return (
       <>
@@ -196,6 +203,16 @@ import {
             {list.map((item) => (
               <Route key={item.title} path={item.link} element={item.component} />
             ))}
+         <Route
+            path="*"
+            element={
+              isAdmin(currentUser) ? (
+                <Main {...{ setSelectedLink, link: '' }} />
+              ) : (
+                <Places {...{ setSelectedLink, link: 'places' }} />
+              )
+            }
+          />
           </Routes>
         </Box>
       </>

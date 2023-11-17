@@ -7,11 +7,13 @@ import { getPlace } from '../../../actions/place';
 import moment from 'moment';
 import { grey } from '@mui/material/colors';
 import PlaceActions from './PlaceActions'
+import isAdmin from '../utils/isAdmin';
+
 
 const Places = ({setSelectedLink, link}) =>{
     
   const {
-    state: { place },
+    state: { place , currentUser},
     dispatch,
   } = useValue();
 
@@ -90,7 +92,9 @@ const Places = ({setSelectedLink, link}) =>{
       </Typography>
       <DataGrid
         columns={columns}
-        rows={place}
+        //Verifica se o usuario é Admin e mostra todos locais caso ele seja.
+        //Caso o usuario nao seja admin faz um filtro mostrando somente os locais adicionados por este usuario.
+        rows={isAdmin(currentUser)? place: place.filter(place=>place.uid === currentUser.id)}
         getRowId={(row) => row._id}
         rowsPerPageOptions={[5, 10, 20]}
         pageSize={pageSize}

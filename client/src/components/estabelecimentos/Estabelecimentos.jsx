@@ -10,9 +10,55 @@ import {
 } from '@mui/material';
 import { useValue } from '../../context/ContextProvider';
 import { StarBorder } from '@mui/icons-material';
+import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
+import SentimentDissatisfiedIcon from '@mui/icons-material/SentimentDissatisfied';
+import SentimentSatisfiedIcon from '@mui/icons-material/SentimentSatisfied';
+import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAltOutlined';
+import SentimentVerySatisfiedIcon from '@mui/icons-material/SentimentVerySatisfied';
+import PropTypes from 'prop-types';
+import { styled } from '@mui/material/styles';
+import { RiMoneyDollarCircleFill } from "react-icons/ri";
 
 const Estabelecimentos = () => {
-  const {state:{filteredPlaces},dispatch} = useValue();
+  const { state: { filteredPlaces }, dispatch } = useValue();
+
+  const StyledRating = styled(Rating)(({ theme }) => ({
+    '& .MuiRating-iconEmpty .MuiSvgIcon-root': {
+      color: theme.palette.action.disabled,
+    },
+  }));
+
+  const customIcons = {
+    1: {
+      icon: <SentimentVeryDissatisfiedIcon color="error" />,
+      label: 'Very Dissatisfied',
+    },
+    2: {
+      icon: <SentimentDissatisfiedIcon color="error" />,
+      label: 'Dissatisfied',
+    },
+    3: {
+      icon: <SentimentSatisfiedIcon color="warning" />,
+      label: 'Neutral',
+    },
+    4: {
+      icon: <SentimentSatisfiedAltIcon color="success" />,
+      label: 'Satisfied',
+    },
+    5: {
+      icon: <SentimentVerySatisfiedIcon color="success" />,
+      label: 'Very Satisfied',
+    },
+  };
+
+  function IconContainer(props) {
+    const { value, ...other } = props;
+    return <span {...other}>{customIcons[value].icon}</span>;
+  }
+
+  IconContainer.propTypes = {
+    value: PropTypes.number.isRequired,
+  };
   return (
     <Container>
       <ImageList
@@ -44,21 +90,24 @@ const Estabelecimentos = () => {
                 alt={establishment.title}
                 loading="lazy"
                 style={{ cursor: 'pointer' }}
-                onClick={()=> dispatch({type:'UPDATE_ESTABLISHMENT', payload: establishment })}
+                onClick={() => dispatch({ type: 'UPDATE_ESTABLISHMENT', payload: establishment })}
               />
               <ImageListItemBar
                 title={establishment.title}
                 actionIcon={
-                  <Rating
-                    sx={{ color: 'rgba(255,255,255, 0.8)', mr: '5px' }}
-                    name="establishment-rating"
-                    defaultValue={3.5}
-                    precision={0.5}
-                    emptyIcon={
-                      <StarBorder sx={{ color: 'rgba(255,255,255, 0.8)' }} />
-                    }
+                  <StyledRating
+                    name="establishment-ratings"
+                    defaultValue={establishment?.ratings}
+                    IconContainerComponent={IconContainer}
+                    highlightSelectedOnly
+                    readOnly
+                    sx={{pr:2}}
                   />
                 }
+                sx={{
+                  background:
+                    'linear-gradient(to bottom, rgba(0,0,0,0.7)0%, rgba(0,0,0,0.9)95%, rgba(0,0,0,0)100%)',
+                }}
               />
             </ImageListItem>
           </Card>

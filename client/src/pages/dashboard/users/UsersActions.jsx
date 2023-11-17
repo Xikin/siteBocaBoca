@@ -5,11 +5,11 @@
  import { useEffect, useState } from 'react';
  import { Check, Save } from '@mui/icons-material';
  import { green } from '@mui/material/colors';
- import { updateStatus } from '../../../actions/user';
+ import { getUsers, updateStatus } from '../../../actions/user';
  import { useValue } from '../../../context/ContextProvider';
 
  const UsersActions = ({ params, rowId, setRowId }) => {
-  const { dispatch } = useValue();
+  const { dispatch, state:{currentUser}} = useValue();
 
   const [success, setSuccess] = useState(false);
 
@@ -19,11 +19,12 @@
     setLoading(true); //Ao clicar no botão para salvar as regras inicia o loading 
  
     const { role, active, _id } = params.row;//parametros que será enviado para o servidor 
-    const result = await updateStatus({ role, active }, _id, dispatch);
+    const result = await updateStatus({ role, active }, _id, dispatch, currentUser);
     // Se tiver um objeto no resultado o resultado será setado como true
     if (result) {
       setSuccess(true);
       setRowId(null);
+      getUsers(dispatch, currentUser)
     }
     setLoading(false);
   };

@@ -1,16 +1,30 @@
 import { Dashboard, Logout, Settings } from '@mui/icons-material';
 import { ListItemIcon, Menu, MenuItem } from '@mui/material';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useValue } from '../../context/ContextProvider';
 import useCheckToken from '../../hooks/useCheckToken';
 import Profile from './Profile';
 import { useNavigate } from 'react-router-dom';
+import { logout } from '../../actions/user';
+import { storePlace } from '../../actions/place';
+import ChangePasswordDialog from './ChangePassword';
 
 const UserMenu = ({ anchorUserMenu, setAnchorUserMenu }) => {
+
+  const [isChangePasswordDialogOpen, setIsChangePasswordDialogOpen] = useState(false);// MUdar essa linha
+  const handleCloseChangePasswordDialog = () => {
+    setIsChangePasswordDialogOpen(false);
+  };
+  const handleOpenChangePasswordDialog = () => {
+    setIsChangePasswordDialogOpen(true);
+  };
+
+
+  
   useCheckToken();
   const {
     dispatch,
-    state: { currentUser },
+    state: { currentUser, location, details, addedImages, deletedImages, images, updatedPlace },
   } = useValue();
   const handleCloseUserMenu = () => {
     setAnchorUserMenu(null);
@@ -18,6 +32,24 @@ const UserMenu = ({ anchorUserMenu, setAnchorUserMenu }) => {
 
   const navigate = useNavigate();
 
+  const handleLogout = () => {
+    storePlace(location, details, images, updatedPlace, deletedImages, addedImages, currentUser.id)
+    logout(dispatch)
+  }
+
+
+  useEffect(() => {
+    const storeBeforeLeave = (e) => {
+      if (storePlace(location, details, images, updatedPlace, deletedImages, addedImages, currentUser.id)) {
+        e.preventDefault()
+        e.returnValue = true
+      }
+    }
+
+    window.addEventListener('beforeunload', storeBeforeLeave);
+    return () => window.removeEventListener('beforeunload', storeBeforeLeave);
+
+  }, [location, details, images]);
   return (
     <>
       <Menu
@@ -26,7 +58,7 @@ const UserMenu = ({ anchorUserMenu, setAnchorUserMenu }) => {
         onClose={handleCloseUserMenu}
         onClick={handleCloseUserMenu}
       >
-           {!currentUser.google && (
+        {!currentUser.google && (
           <MenuItem
             onClick={() =>
               dispatch({
@@ -49,20 +81,34 @@ const UserMenu = ({ anchorUserMenu, setAnchorUserMenu }) => {
           onClick={() => navigate('dashboard')}
         >
           <ListItemIcon>
-          <Dashboard fontSize="small" />
+            <Dashboard fontSize="small" />
           </ListItemIcon>
           Dashboard
         </MenuItem>
         <MenuItem
-          onClick={() => dispatch({ type: 'UPDATE_USER', payload: null })}
+          onClick={handleLogout}
         >
           <ListItemIcon>
             <Logout fontSize="small" />
           </ListItemIcon>
           Logout
         </MenuItem>
+        {!currentUser.google && (
+          <MenuItem
+            onClick={ ()=> navigate('')}
+          >
+            <ListItemIcon>
+              <Settings fontSize="small" />
+            </ListItemIcon>
+            Mudar senha
+          </MenuItem>
+        )}
+
       </Menu>
       <Profile />
+      <ChangePasswordDialog/>
+  
+    
     </>
   );
 };

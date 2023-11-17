@@ -1,3 +1,6 @@
+// Componente responsavel por fazer a verificação da forma que o usuario usou para Logar
+// As possibilidades sao: Google Login  e Normal Login
+
 import { OAuth2Client } from 'google-auth-library';
 import jwt from 'jsonwebtoken';
 
@@ -17,11 +20,13 @@ const auth = async (req, res, next) => {
         id: payload.sub,
         name: payload.name,
         photoURL: payload.picture,
+        role:'basic'
       };
     } else {
+      //Verficamos e extraimos as informações do usuário pelo token no servidor.
       const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
-      const { id, name, photoURL } = decodedToken;
-      req.user = { id, name, photoURL };
+      const { id, name, photoURL ,role} = decodedToken;
+      req.user = { id, name, photoURL ,role};
     }
     next();6
   } catch (error) {

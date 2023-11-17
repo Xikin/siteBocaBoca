@@ -92,8 +92,8 @@ export const updateProfile = async (currentUser, updatedFields, dispatch) => {
   dispatch({ type: 'END_LOADING' });
 };
 
-export const getUsers = async (dispatch) => {
-  const result = await fetchData({ url, method: 'GET' }, dispatch)
+export const getUsers = async (dispatch, currentUser) => {
+  const result = await fetchData({ url, method: 'GET', token:currentUser.token}, dispatch)
   if (result) {
     dispatch({ type: 'UPDATE_USERS', payload: result })
   }
@@ -101,11 +101,46 @@ export const getUsers = async (dispatch) => {
 
 
 //Atualizar as regras no dashboard para os usuários da aplicação
-export const updateStatus = (updatedFields, userId, dispatch)=>{
+export const updateStatus = (updatedFields, userId, dispatch, currentUser) => {
   return fetchData({
     url: `${url}/updateStatus/${userId}`,
     method: 'PATCH',
-    body:updatedFields, //Os campos role e se o botão está ativo
+    token:currentUser.token,
+    body: updatedFields, //Os campos role e se o botão está ativo
 
-  },dispatch)
+  }, dispatch)
 }
+
+export const logout = (dispatch) => {
+  dispatch({ type: 'UPDATE_USER', payload: null })
+  dispatch({ type: 'RESET_PLACE' })
+  dispatch({ type: 'UPDATE_USERS', payload: [] })
+
+}
+
+
+export const updatePassword = async (userId, newPassword, dispatch) => {
+  dispatch({ type: 'START_LOADING' });
+
+  const result = await fetchData(
+    { 
+      method: 'POST',
+      url: url + '/changePassword', 
+      body: JSON.stringify({ userId, newPassword }) 
+    },
+    dispatch
+  );
+
+  if (result) {
+    dispatch({ type: 'UPDATE_USER', payload: result });
+    dispatch({ type: 'CLOSE_LOGIN' });
+    dispatch({
+      type: 'UPDATE_ALERT',
+      payload: {
+        open: true,
+        severity: 'success',
+        message: 'Sua senha foi Atualizada com sucesso',
+      },
+    });
+  }
+};

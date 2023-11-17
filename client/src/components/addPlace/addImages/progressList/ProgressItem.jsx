@@ -10,7 +10,7 @@ const ProgressItem = ({ file }) => {
   const [progress, setProgress] = useState(0);
   const [imageURL, setImageURL] = useState(null);
   const {
-    state: { currentUser },
+    state: { currentUser, updatedPlace },
     dispatch,
   } = useValue();
   useEffect(() => {
@@ -19,12 +19,15 @@ const ProgressItem = ({ file }) => {
       try {
         const url = await uploadFileProgress(
           file,
-          `rooms/${currentUser?.id}`,
+          `rooms/${updatedPlace ? updatedPlace.uid: currentUser?.id}`,
           imageName,
           setProgress
         );
 
-        dispatch({ type: 'UPDATE_IMAGES', payload: url });
+        dispatch({ type: 'UPDATE_IMAGES', payload: [url] });
+        if(updatedPlace){
+          dispatch({ type: 'UPDATE_ADDED_IMAGES', payload: [url] });
+        }
         setImageURL(null);
       } catch (error) {
         dispatch({

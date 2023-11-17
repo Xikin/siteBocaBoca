@@ -9,7 +9,7 @@ import  UsersActions from './UsersActions';
 
 const Users = ({ setSelectedLink, link }) => {
   const {
-    state: { users },
+    state: { users , currentUser},
     dispatch,
   } = useValue();
 
@@ -18,7 +18,8 @@ const Users = ({ setSelectedLink, link }) => {
 
   useEffect(() => {
     setSelectedLink(link);
-    if (users.length === 0) getUsers(dispatch);
+    //Passando tambem a permissao do usuario de acesso a este item.
+    if (users.length === 0) getUsers(dispatch, currentUser);
   }, []);
 
   const columns = useMemo(
@@ -38,15 +39,16 @@ const Users = ({ setSelectedLink, link }) => {
         headerName: 'Role',
         width: 100,
         type: 'singleSelect',
-        valueOptions: ['basico', 'editor', 'admin'],
-        editable: true,
+        valueOptions: ['basic', 'editor', 'admin'],
+        //Somente se o usuario for admin o botao de edição de usuario estara disponível.
+        editable: currentUser?.role === 'admin',
       },
       {
         field: 'active',
         headerName: 'Active',
         width: 100,
         type: 'boolean',
-        editable: true,
+        editable: currentUser?.role === 'admin',
       },
       {
         field: 'criadoEm',
@@ -100,7 +102,7 @@ const Users = ({ setSelectedLink, link }) => {
               theme.palette.mode === 'light' ? grey[200] : grey[900],
           },
         }}
-        onCellEditStart={params => setRowId(params.id)}
+        onCellEditStart={(params) => setRowId(params.id)}
       />
     </Box>
   );
