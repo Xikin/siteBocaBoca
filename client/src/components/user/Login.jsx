@@ -17,6 +17,7 @@ import GoogleOneTapLogin from "./GoogleOneTapLogin";
 import PasswordField from "./PasswordField";
 
 
+
 const Login = () => {
   const {state: { openLogin }, dispatch,} = useValue();
   const [title, setTitle] = useState("Login");
@@ -25,7 +26,7 @@ const Login = () => {
   const emailRef = useRef();
   const passwordRef = useRef();
   const confirmPasswordRef = useRef();
-
+  
   const handleClose = () => {
     dispatch({ type: 'CLOSE_LOGIN'});
   };
@@ -36,7 +37,7 @@ const Login = () => {
     const email = emailRef.current.value;
     const password = passwordRef.current.value;
     //enviar a requisição se não estiver registrado e retornar
-    if(!isRegister) return  login({email, password},dispatch)//Se estiver logado retorna a chamada da funçãp login
+    if(!isRegister) return  login({email, password},dispatch)//Se estiver logado retorna a chamada da função login
     
     const name = nameRef.current.value;
     const confirmPassword = confirmPasswordRef.current.value;
@@ -119,11 +120,13 @@ const Login = () => {
             />
           )}
         </DialogContent>
-        <DialogActions sx={{ px: "19px" }}>
+        <DialogActions sx={{ px: "19px",  justifyContent:'start'}}>
           <Button type="submit"  variant="contained" endIcon={<Send />}>
           {!isRegister ? "Login" : "Registrar"} 
           </Button>
         </DialogActions>
+
+       
       </form>
       <DialogActions sx={{ justifyContent: "Left", p: "5px 24px" }}>
         {isRegister
@@ -138,6 +141,8 @@ const Login = () => {
         <GoogleOneTapLogin />
       </DialogActions>
     </Dialog>
+
+    
   );
 };
 

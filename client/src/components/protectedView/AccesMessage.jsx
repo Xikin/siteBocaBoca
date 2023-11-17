@@ -6,7 +6,7 @@ import { useValue } from '../../context/ContextProvider';
 const AccessMessage = () => {
   const { dispatch } = useValue();
   return (
-    <Container sx={{ py: 5 }}>
+    <Container sx={{ py: 10 }}>
       <Alert severity="error" variant="outlined">
         <AlertTitle>Acesso Proibido!</AlertTitle>
         Por favor faça o Login ou se Registre para ter acesso a esta pagina.

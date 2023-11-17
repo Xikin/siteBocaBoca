@@ -19,13 +19,14 @@ import PiePlacesCost from './PiePlacesCost';
 import AreaPlaceUsers from './AreaPlacesUsers';
 const Main = ({ setSelectedLink, link }) => {
   const {
-    state: { place, users },
+    state: { place, users, currentUser },
     dispatch,
   } = useValue();
   useEffect(() => {
     setSelectedLink(link);
     if (place.length === 0) getPlace(dispatch);
-    if (users.length === 0) getUsers(dispatch);
+    //Passa o usuario atual para verificar se ele tem a permissao de ver a lista de usuarios.
+    if (users.length === 0) getUsers(dispatch, currentUser);
   }, []);
   return (
     <Box

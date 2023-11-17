@@ -18,3 +18,8 @@ export const deletePlace = tryCatch(async (req, res) => {
   const { _id } = await Place.findByIdAndDelete(req.params.placeId);
   res.status(200).json({ success: true, result: { _id } });
 });
+
+export const updatePlace = tryCatch(async (req, res) => {
+  const updatedPlace = await Place.findByIdAndUpdate(req.params.placeId, req.body, { new: true });
+  res.status(200).json({ success: true, result: updatedPlace })
+})

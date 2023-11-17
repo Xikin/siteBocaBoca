@@ -20,7 +20,7 @@ const ClusterMap = () => {
   const [clusters, setClusters] = useState([]);
   const [bounds, setBounds] = useState([-180, -85, 180, 85])
   const [zoom, setZoom] = useState(0)
-  const [popupInfo, setPopupInfo]= useState(null);
+  const [popupInfo, setPopupInfo] = useState(null);
   useEffect(() => {
     getPlace(dispatch)
   }, [])
@@ -38,7 +38,9 @@ const ClusterMap = () => {
         lat: places.lat,
         images: places.images,
         uPhoto: places.uPhoto,
-        uName: places.uName
+        uName: places.uName,
+        ratings: places.ratings,
+        money: places.money
       },
       geometry: {
         type: 'Point',
@@ -111,7 +113,7 @@ const ClusterMap = () => {
                 src={cluster.properties.uPhoto}
                 component={Paper}
                 elevation={2}
-                onClick={()=>setPopupInfo(cluster.properties)}
+                onClick={() => setPopupInfo(cluster.properties)}
               />
             </Tooltip>
           </Marker>
@@ -119,16 +121,16 @@ const ClusterMap = () => {
       })}
       <GeocoderInput />
       {popupInfo && (
-      <Popup
-      longitude={popupInfo.lng}
-      latitude={popupInfo.lat}
-      maxWidth='auto'
-      closeOnClick={false}
-      focusAfterOpen={false}
-      onClose={()=>setPopupInfo(null)}
-      >
-        <PopupRoom {...{popupInfo}}/>
-      </Popup>)}
+        <Popup
+          longitude={popupInfo.lng}
+          latitude={popupInfo.lat}
+          maxWidth='auto'
+          closeOnClick={false}
+          focusAfterOpen={false}
+          onClose={() => setPopupInfo(null)}
+        >
+          <PopupRoom {...{ popupInfo }} />
+        </Popup>)}
     </ReactMapGL>
   )
 }
