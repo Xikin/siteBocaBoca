@@ -6,8 +6,9 @@ import { getStorage } from 'firebase/storage';
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 // Your web app's Firebase configuration
+
 const firebaseConfig = {
-    apiKey: "AIzaSyD24huFpSlGTiGErMjxopoIUTgzxZX646k",
+    apiKey: process.env.REACT_APP_FIREBASE,
     authDomain: "sitebocaboca.firebaseapp.com",
     projectId: "sitebocaboca",
     storageBucket: "sitebocaboca.appspot.com",
