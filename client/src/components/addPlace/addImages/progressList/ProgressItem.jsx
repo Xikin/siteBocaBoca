@@ -3,7 +3,7 @@ import { Box, ImageListItem } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import CircularProgressWithLabel from './CircularProgressWithLabel';
 import { v4 as uuidv4 } from 'uuid';
-import uploadFileProgress from '../../../../firebase/uploadFileProgress';
+import uploadFileProgress from '../../../../firebase/uploadfileProgress';
 import { useValue } from '../../../../context/ContextProvider';
 
 const ProgressItem = ({ file }) => {
