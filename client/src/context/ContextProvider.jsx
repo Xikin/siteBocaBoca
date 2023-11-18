@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useEffect, useReducer, useRef } from 'react';
 import reducer from './reducer';
-
+//Contexto inicial dos componentes e dados.
 const initialState = {
   currentUser: null,
   openLogin: false,

@@ -2,6 +2,8 @@ import { Backdrop, CircularProgress } from '@mui/material'
 import React from 'react'
 import { useValue } from '../context/ContextProvider'
 
+
+//Componente de loading ao iniciar uma requisição.
 const Loading = () => {
  
     const{state:{loading}} = useValue()

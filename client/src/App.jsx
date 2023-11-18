@@ -6,7 +6,7 @@ import Loading from './components/Loading'
 import Estabelecimento from './components/estabelecimentos/Estabelecimento'
 const App = () => {
   return (
-
+ //Componentes Tela principal.
     <>
     <Loading/>
     <Notification/>
