@@ -1,26 +1,16 @@
 import { Dashboard, Logout, Settings } from '@mui/icons-material';
 import { ListItemIcon, Menu, MenuItem } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useValue } from '../../context/ContextProvider';
 import useCheckToken from '../../hooks/useCheckToken';
 import Profile from './Profile';
 import { useNavigate } from 'react-router-dom';
 import { logout } from '../../actions/user';
 import { storePlace } from '../../actions/place';
-import ChangePasswordDialog from './ChangePassword';
 
 const UserMenu = ({ anchorUserMenu, setAnchorUserMenu }) => {
 
-  const [isChangePasswordDialogOpen, setIsChangePasswordDialogOpen] = useState(false);// MUdar essa linha
-  const handleCloseChangePasswordDialog = () => {
-    setIsChangePasswordDialogOpen(false);
-  };
-  const handleOpenChangePasswordDialog = () => {
-    setIsChangePasswordDialogOpen(true);
-  };
-
-
-  
+ 
   useCheckToken();
   const {
     dispatch,
@@ -106,7 +96,6 @@ const UserMenu = ({ anchorUserMenu, setAnchorUserMenu }) => {
 
       </Menu>
       <Profile />
-      <ChangePasswordDialog/>
   
     
     </>

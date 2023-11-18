@@ -22,20 +22,10 @@ const[anchorUserMenu, setAnchorUserMenu] = useState(null)
   return (
 
 <Box>
-<IconButton size='large' color='inherit'>
-    <Badge color='error' badgeContent={5} >
-        <Mail/>
-    </Badge>
-</IconButton>
-<IconButton size='large' color='inherit'>
-    <Badge color='error' badgeContent={20} >
-        <Notifications/>
-    </Badge>
-</IconButton>
 <Tooltip title='Abrir configurações'>
 
 {/* No clique do Avatar do usuário disparará o evento para abertura do component UserMenu */}
-<IconButton onClick={(e)=>setAnchorUserMenu(e.currentTarget)}>
+<IconButton  onClick={(e)=>setAnchorUserMenu(e.currentTarget)}>
     <Avatar src={currentUser?.photoURL} alt={currentUser?.name}>
     {currentUser?.name?.charAt(0).toUpperCase()}
     </Avatar>
