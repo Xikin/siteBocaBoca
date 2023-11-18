@@ -1,5 +1,5 @@
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { IconButton, Input, InputAdornment, TextField } from "@mui/material";
+import { IconButton, InputAdornment, TextField } from "@mui/material";
 import React from "react";
 import { useState } from "react";
 
@@ -27,10 +27,10 @@ const PasswordField = ({
       type={showPassword ? "text" : "password"}
       fullWidth
       inputRef={passwordRef}
-      inputProps={{ minLenght: 6 }}
+      inputProps={{ minlenght: 6 }}
       required
       InputProps={{
-        endAdornament: (
+        endadornament: (
           <InputAdornment position="end">
             {" "}
             <IconButton onClick={handleClick} onMouseDown={handleMouseDown}>

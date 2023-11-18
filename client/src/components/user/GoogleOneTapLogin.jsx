@@ -12,7 +12,7 @@ const GoogleOneTapLogin = () => {
       const token = response.credential
       const decodedToken = jwtDecode(token)
       const {sub:id, email, name, picture:photoURL} = decodedToken
-      dispatch({type: 'UPDATE_USER', payload: {id, email, name, photoURL, token, google:true}})
+      dispatch({type: 'UPDATE_USER', payload: {id, email, name, photoURL, token, google:true, role:'basic'}})
       dispatch({type:'CLOSE_LOGIN' })
   }
   const handleGoogleLogin = () => {
@@ -24,7 +24,7 @@ const GoogleOneTapLogin = () => {
       })
       window.google.accounts.id.prompt((notification) => {
         if (notification.isNotDisplayed()) {
-          throw new Error('Tente limpar os cookes do seu navegador')
+          throw new Error('Tente limpar os cookies do seu navegador')
         }
         if(notification.isSkippedMoment() || notification.isDismissedMoment()){
          setDisabled(false)

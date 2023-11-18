@@ -1,4 +1,4 @@
-import { Close, Google, Send } from "@mui/icons-material";
+import { Close, Send } from "@mui/icons-material";
 import {
   Button,
   Dialog,
@@ -11,43 +11,38 @@ import {
 } from "@mui/material";
 import React from "react";
 import { useEffect, useState, useRef } from "react";
+import { login, register } from "../../actions/user";
 import { useValue } from "../../context/ContextProvider";
 import GoogleOneTapLogin from "./GoogleOneTapLogin";
 import PasswordField from "./PasswordField";
 
+
+
 const Login = () => {
-  const {
-    state: { openLogin },
-    dispatch,
-  } = useValue();
+  const {state: { openLogin }, dispatch,} = useValue();
   const [title, setTitle] = useState("Login");
   const [isRegister, setIsRegister] = useState(false);
   const nameRef = useRef();
   const emailRef = useRef();
   const passwordRef = useRef();
   const confirmPasswordRef = useRef();
-
+  
   const handleClose = () => {
-    dispatch({ type: "CLOSE_LOGIN" });
+    dispatch({ type: 'CLOSE_LOGIN'});
   };
 
   const handleSubmit = (e) => {
-        e.preventDefault();
+    e.preventDefault();
 
-    //testing  Loading
-    dispatch({type:'START_LOADING'})
-
-    setTimeout(() => {
-      dispatch({type:'END_LOADING'})
-    }, 6000);
-
-
-    //Testando a notificação
+    const email = emailRef.current.value;
     const password = passwordRef.current.value;
+    //enviar a requisição se não estiver registrado e retornar
+    if(!isRegister) return  login({email, password},dispatch)//Se estiver logado retorna a chamada da função login
+    
+    const name = nameRef.current.value;
     const confirmPassword = confirmPasswordRef.current.value;
-
-    if (password !== confirmPassword) {
-      dispatch({
+    if (password !== confirmPassword)
+      return dispatch({
         type: "UPDATE_ALERT",
         payload: {
           open: true,
@@ -55,14 +50,21 @@ const Login = () => {
           message: "As senhas não são iguais",
         },
       });
-    }
+
+      
+
+
+      register({name, email, password}, dispatch)
+
+
+    //Registrar requisições envios
   };
 
   useEffect(() => {
     isRegister ? setTitle("Registrar") : setTitle("Login");
   }, [isRegister]);
   return (
-    <Dialog open={openLogin} onclose={handleClose}>
+    <Dialog open={openLogin} onClose={handleClose}>
       <DialogTitle>
         {title}
         <IconButton
@@ -118,11 +120,13 @@ const Login = () => {
             />
           )}
         </DialogContent>
-        <DialogActions sx={{px:'19px'}}>
-          <Button type="submit" variant="contained" endIcon={<Send />}>
-            Entrar
+        <DialogActions sx={{ px: "19px",  justifyContent:'start'}}>
+          <Button type="submit"  variant="contained" endIcon={<Send />}>
+          {!isRegister ? "Login" : "Registrar"} 
           </Button>
         </DialogActions>
+
+       
       </form>
       <DialogActions sx={{ justifyContent: "Left", p: "5px 24px" }}>
         {isRegister
@@ -137,6 +141,8 @@ const Login = () => {
         <GoogleOneTapLogin />
       </DialogActions>
     </Dialog>
+
+    
   );
 };
 

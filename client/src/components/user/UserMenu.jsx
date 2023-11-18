@@ -1,62 +1,116 @@
-import { Logout, Settings } from '@mui/icons-material'
-import { ListItemIcon, Menu, MenuItem } from '@mui/material'
-import React from 'react'
-import { useValue } from '../../context/ContextProvider'
-import useCheckToken from '../../hooks/useCheckToken'
+import { Dashboard, Logout, Settings } from '@mui/icons-material';
+import { ListItemIcon, Menu, MenuItem } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { useValue } from '../../context/ContextProvider';
+import useCheckToken from '../../hooks/useCheckToken';
+import Profile from './Profile';
+import { useNavigate } from 'react-router-dom';
+import { logout } from '../../actions/user';
+import { storePlace } from '../../actions/place';
+import ChangePasswordDialog from './ChangePassword';
 
-const UserMenu = ({ anchorUserMenu, setAnchorUser }) => {
-     useCheckToken();
-     const { dispatch, state: { currentUser } } = useValue()
-     const handlecloserUserMenu = () => {
-          setAnchorUser(null)
-     }
+const UserMenu = ({ anchorUserMenu, setAnchorUserMenu }) => {
 
-     const testAuthorization = async () => {
-          const url = process.env.REACT_APP_SERVER_URL + '/room'
-          try {
-               const response = await fetch(url, {
-                    method: 'POST',
-                    headers: {
-                         'Content-Type': 'application/json',
-                         authorization: `Bearer ${currentUser.token}`
-                    },
-               })
-               const data = await response.json()
-               console.log(data)
-               if (!data.success) {
-                    if(response.status === 401) dispatch({ type: 'UPDATE_USER', payload: null });
-                    throw new Error(data.message)
-               }
-          } catch (error) {
-               dispatch({ type: 'UPDATE_ALERT', payload: { open: true, message: error.message, severity: 'error' } })
-               console.log(error)
-          }
-     }
+  const [isChangePasswordDialogOpen, setIsChangePasswordDialogOpen] = useState(false);// MUdar essa linha
+  const handleCloseChangePasswordDialog = () => {
+    setIsChangePasswordDialogOpen(false);
+  };
+  const handleOpenChangePasswordDialog = () => {
+    setIsChangePasswordDialogOpen(true);
+  };
 
-     return (
-          <Menu
-               anchorEl={anchorUserMenu}
-               open={Boolean(anchorUserMenu)}
-               onClose={handlecloserUserMenu}
-               onClick={handlecloserUserMenu}
+
+  
+  useCheckToken();
+  const {
+    dispatch,
+    state: { currentUser, location, details, addedImages, deletedImages, images, updatedPlace },
+  } = useValue();
+  const handleCloseUserMenu = () => {
+    setAnchorUserMenu(null);
+  };
+
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    storePlace(location, details, images, updatedPlace, deletedImages, addedImages, currentUser.id)
+    logout(dispatch)
+  }
+
+
+  useEffect(() => {
+    const storeBeforeLeave = (e) => {
+      if (storePlace(location, details, images, updatedPlace, deletedImages, addedImages, currentUser.id)) {
+        e.preventDefault()
+        e.returnValue = true
+      }
+    }
+
+    window.addEventListener('beforeunload', storeBeforeLeave);
+    return () => window.removeEventListener('beforeunload', storeBeforeLeave);
+
+  }, [location, details, images]);
+  return (
+    <>
+      <Menu
+        anchorEl={anchorUserMenu}
+        open={Boolean(anchorUserMenu)}
+        onClose={handleCloseUserMenu}
+        onClick={handleCloseUserMenu}
+      >
+        {!currentUser.google && (
+          <MenuItem
+            onClick={() =>
+              dispatch({
+                type: 'UPDATE_PROFILE',
+                payload: {
+                  open: true,
+                  file: null,
+                  photoURL: currentUser?.photoURL,
+                },
+              })
+            }
           >
-               <MenuItem onClick={testAuthorization}>
-                    <ListItemIcon>
-                         <Settings fontSize='small' />
+            <ListItemIcon>
+              <Settings fontSize="small" />
+            </ListItemIcon>
+            Perfil
+          </MenuItem>
+        )}
+        <MenuItem
+          onClick={() => navigate('dashboard')}
+        >
+          <ListItemIcon>
+            <Dashboard fontSize="small" />
+          </ListItemIcon>
+          Dashboard
+        </MenuItem>
+        <MenuItem
+          onClick={handleLogout}
+        >
+          <ListItemIcon>
+            <Logout fontSize="small" />
+          </ListItemIcon>
+          Logout
+        </MenuItem>
+        {!currentUser.google && (
+          <MenuItem
+            onClick={ ()=> navigate('')}
+          >
+            <ListItemIcon>
+              <Settings fontSize="small" />
+            </ListItemIcon>
+            Mudar senha
+          </MenuItem>
+        )}
 
-                    </ListItemIcon>
-                    Perfil
-               </MenuItem>
-               <MenuItem onClick={() => dispatch({ type: 'UPDATE_USER', payload: null })}>
-                    <ListItemIcon>
-                         <Logout fontSize='small' />
+      </Menu>
+      <Profile />
+      <ChangePasswordDialog/>
+  
+    
+    </>
+  );
+};
 
-                    </ListItemIcon>
-                    Sair
-               </MenuItem>
-          </Menu>
-
-     )
-}
-
-export default UserMenu
+export default UserMenu;
