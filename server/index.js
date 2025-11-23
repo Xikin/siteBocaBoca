@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import placeRouter from './routes/placeRouter.js';
 import mongoose from 'mongoose';
 import userRouter from './routes/userRouter.js';
+import cors from 'cors';
 
 dotenv.config();
 
@@ -22,7 +23,7 @@ app.use((req, res, next) => {
   );
   next();
 });
-
+app.use(cors())
 app.use(express.json({ limit: '10mb' }));
 app.use('/user', userRouter);
 app.use('/place', placeRouter);
